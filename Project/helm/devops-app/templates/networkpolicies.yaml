@@ -1,0 +1,74 @@
+{{- if .Values.networkPolicies.enabled }}
+---
+# Allow ingress traffic to frontend from ingress-nginx namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-frontend
+  namespace: {{ .Values.namespaces.frontend }}
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.networkPolicies.ingressNamespace }}
+    ports:
+    - protocol: TCP
+      port: 80
+---
+# Allow frontend to access backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: {{ .Values.namespaces.backend }}
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: {{ .Values.namespaces.frontend }}
+      podSelector:
+        matchLabels:
+          app: frontend
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.networkPolicies.ingressNamespace }}
+    ports:
+    - protocol: TCP
+      port: {{ .Values.backend.service.port }}
+---
+# Allow backend to access database (Postgres + Redis)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-backend-to-db
+  namespace: {{ .Values.namespaces.db }}
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: {{ .Values.namespaces.backend }}
+      podSelector:
+        matchLabels:
+          app: backend
+    ports:
+    - protocol: TCP
+      port: {{ .Values.database.postgres.port }}
+    - protocol: TCP
+      port: {{ .Values.database.redis.port }}
+{{- end }}

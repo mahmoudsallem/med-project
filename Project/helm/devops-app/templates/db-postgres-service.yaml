@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: {{ .Values.namespaces.db }}
+spec:
+  clusterIP: None
+  selector:
+    app: postgres
+  ports:
+  - port: {{ .Values.database.postgres.port }}

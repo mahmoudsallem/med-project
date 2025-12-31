@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-frontend
+  namespace: frontend-ns
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    # Replace {} with the actual label of your ingress namespace
+    - namespaceSelector:
+        matchLabels:
+          # This assumes your ingress controller is in a ns labeled name=ingress-nginx
+          # If using minikube ingress addon, the ns is 'ingress-nginx'
+          kubernetes.io/metadata.name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 80
