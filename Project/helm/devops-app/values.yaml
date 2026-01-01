@@ -14,7 +14,7 @@ namespaces:
 # Frontend Configuration
 # -----------------------------------------------------------------------------
 frontend:
-  replicaCount: 1
+  replicaCount: 3
   image:
     repository: mostafakassas55/mfrontend
     tag: v4
