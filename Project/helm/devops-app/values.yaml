@@ -23,7 +23,7 @@ frontend:
     port: 80
   ingress:
     enabled: true
-    host: frontend.nti.com
+    host: a01d06f1032a4460e9954daf94e0dac2-1374708381.us-east-1.elb.amazonaws.com
     ingressClassName: nginx
 
 # -----------------------------------------------------------------------------
