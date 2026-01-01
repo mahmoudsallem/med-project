@@ -1,0 +1,77 @@
+# =============================================================================
+# DevOps App Helm Chart - values.yaml
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Namespaces
+# -----------------------------------------------------------------------------
+namespaces:
+  frontend: frontend-ns
+  backend: backend-ns
+  db: db-ns
+
+# -----------------------------------------------------------------------------
+# Frontend Configuration
+# -----------------------------------------------------------------------------
+frontend:
+  replicaCount: 1
+  image:
+    repository: mostafakassas55/mfrontend
+    tag: v4
+    pullPolicy: Always
+  service:
+    port: 80
+  ingress:
+    enabled: true
+    host: frontend.nti.com
+    ingressClassName: nginx
+
+# -----------------------------------------------------------------------------
+# Backend Configuration
+# -----------------------------------------------------------------------------
+backend:
+  replicaCount: 1
+  image:
+    repository: mostafakassas55/mbackend
+    tag: v1
+    pullPolicy: IfNotPresent
+  service:
+    port: 5000
+  ingress:
+    enabled: true
+    host: backend.nti.com
+    ingressClassName: nginx
+  # ConfigMap values
+  config:
+    redisPort: "6379"
+    postgresPort: "5432"
+    postgresDb: appdb
+
+# -----------------------------------------------------------------------------
+# Database Configuration
+# -----------------------------------------------------------------------------
+database:
+  postgres:
+    replicaCount: 1
+    image:
+      repository: postgres
+      tag: 15-alpine
+    port: 5432
+    db: appdb
+    user: appuser
+    password: apppass
+
+  redis:
+    replicaCount: 1
+    image:
+      repository: redis
+      tag: 7-alpine
+    port: 6379
+    password: redispass
+
+# -----------------------------------------------------------------------------
+# Network Policies
+# -----------------------------------------------------------------------------
+networkPolicies:
+  enabled: true
+  ingressNamespace: ingress-nginx
