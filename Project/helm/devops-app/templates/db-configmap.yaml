@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+  namespace: {{ .Values.namespaces.db }}
+data:
+  POSTGRES_DB: {{ .Values.database.postgres.db }}

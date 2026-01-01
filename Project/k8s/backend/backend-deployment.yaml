@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: backend-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      initContainers:
+      - name: wait-for-services
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command:
+          - sh
+          - -c
+          - |
+            echo "Waiting for Redis..."
+            # Check Redis in db-ns
+            until nc -z redis-0.redis.db-ns.svc.cluster.local 6379; do
+              echo "Waiting for Redis..."
+              sleep 2
+            done
+            echo "Redis is up!"
+
+            echo "Waiting for Postgres..."
+            # Check Postgres in db-ns
+            until nc -z postgres-0.postgres.db-ns.svc.cluster.local 5432; do
+              echo "Waiting for Postgres..."
+              sleep 2
+            done
+            echo "Postgres is up!"
+      containers:
+      - name: backend
+        image: mostafakassas55/mbackend:v1
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secret

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Team Manager</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Modern Dark Mode Palette */
+      --primary: #6366f1;
+      /* Indigo 500 */
+      --primary-hover: #4f46e5;
+      /* Indigo 600 */
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      /* Deep Slate to Indigo */
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    /* Glassmorphism Card */
+    .glass-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5),
+        0 30px 60px -30px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 1.75rem;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+
+    /* Form Styling */
+    .input-group {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: var(--input-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* List Styling */
+    .list-header {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .list-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+    }
+
+    .user-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 300px;
+      overflow-y: auto;
+      /* Thin scrollbar for Webkit */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    }
+
+    .user-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .user-item:hover {
+      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 1.125rem;
+      color: #e2e8f0;
+    }
+
+    .user-role {
+      font-size: 0.75rem;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      background: rgba(99, 102, 241, 0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      align-self: start;
+    }
+
+    .user-email {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="glass-container">
+    <h2>DevOps Team</h2>
+
+    <form id="userForm">
+      <div class="input-group">
+        <input type="text" id="name" placeholder="Full Name" required autocomplete="off">
+      </div>
+      <div class="input-group">
+        <input type="text" id="job" placeholder="Role / Job Title" required autocomplete="off">
+      </div>
+      <div class="input-group">
+        <input type="email" id="email" placeholder="Email Address" required autocomplete="off">
+      </div>
+      <button type="submit">Add Member</button>
+    </form>
+
+    <div class="list-header">Current Members</div>
+    <ul id="userList" class="user-list">
+      <!-- Javascript will populate this -->
+    </ul>
+  </div>
+
+  <script>
+    const form = document.getElementById('userForm');
+    const userList = document.getElementById('userList');
+
+    // Fetch Users
+    async function fetchUsers() {
+      try {
+        const res = await fetch("/api/users");
+        if (!res.ok) throw new Error("Failed to load users");
+        const users = await res.json();
+        renderUsers(users);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        // Optionally show error in UI
+      }
+    }
+
+    function renderUsers(users) {
+      userList.innerHTML = '';
+      if (users.length === 0) {
+        userList.innerHTML = '<li style="color:var(--text-muted);text-align:center;padding:1rem;">No members yet.</li>';
+        return;
+      }
+
+      users.forEach(u => {
+        const li = document.createElement('li');
+        li.className = 'user-item';
+        // Simple XSS protection
+        const safeName = escapeHtml(u.name);
+        const safeJob = escapeHtml(u.job);
+        const safeEmail = escapeHtml(u.email);
+
+        li.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div class="user-name">${safeName}</div>
+                    <div class="user-role">${safeJob}</div>
+                </div>
+                <div class="user-email">${safeEmail}</div>
+            `;
+        userList.appendChild(li);
+      });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&")
+        .replace(/</g, "<")
+        .replace(/>/g, ">")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Add User
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector('button');
+      const originalText = submitBtn.textContent;
+
+      // Loading State
+      submitBtn.textContent = "Saving...";
+      submitBtn.disabled = true;
+
+      const userData = {
+        name: document.getElementById('name').value,
+        job: document.getElementById('job').value,
+        email: document.getElementById('email').value
+      };
+
+      try {
+        const res = await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData)
+        });
+
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || "Failed to add user");
+        }
+
+        form.reset();
+        fetchUsers();
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        // Restore button
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Initial load
+    fetchUsers();
+  </script>
+
+</body>
+
+</html>

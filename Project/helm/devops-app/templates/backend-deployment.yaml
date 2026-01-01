@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: {{ .Values.namespaces.backend }}
+  labels:
+    {{- include "devops-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      initContainers:
+      - name: wait-for-services
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command:
+          - sh
+          - -c
+          - |
+            echo "Waiting for Redis..."
+            # Check Redis in db-ns
+            until nc -z {{ include "devops-app.redisDns" . }} {{ .Values.database.redis.port }}; do
+              echo "Waiting for Redis..."
+              sleep 2
+            done
+            echo "Redis is up!"
+
+            echo "Waiting for Postgres..."
+            # Check Postgres in db-ns
+            until nc -z {{ include "devops-app.postgresDns" . }} {{ .Values.database.postgres.port }}; do
+              echo "Waiting for Postgres..."
+              sleep 2
+            done
+            echo "Postgres is up!"
+      containers:
+      - name: backend
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.backend.service.port }}
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secret
