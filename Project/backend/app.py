@@ -4,6 +4,7 @@ import redis
 import os
 import json
 
+# Flask backend application
 app = Flask(__name__)
 
 pg_conn = psycopg2.connect(
