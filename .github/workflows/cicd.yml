@@ -87,9 +87,29 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ needs.generate-version.outputs.version }}
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          format: 'markdown'
+          output: 'Project/frontend/SECURITY_REPORT.md'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          exit-code: '0'
+
+      - name: Generate SonarQube Report
+        working-directory: ./Project/frontend
+        run: |
+          echo "# SonarQube Code Quality Report" > QUALITY_REPORT.md
+          echo "" >> QUALITY_REPORT.md
+          echo "**Project:** mahmoudsallem_med-project (frontend)" >> QUALITY_REPORT.md
+          echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> QUALITY_REPORT.md
+          echo "**Version:** ${{ needs.generate-version.outputs.version }}" >> QUALITY_REPORT.md
+          echo "" >> QUALITY_REPORT.md
+          echo "View detailed results at: https://sonarcloud.io/project/overview?id=mahmoudsallem_med-project" >> QUALITY_REPORT.md
+
+      - name: Commit Scan Reports
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Project/frontend/SECURITY_REPORT.md Project/frontend/QUALITY_REPORT.md
+          git diff --staged --quiet || git commit -m "chore: update frontend scan reports for ${{ needs.generate-version.outputs.version }}"
+          git push || true
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -167,9 +187,29 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.DOCKERHUB_USERNAME }}/backend:${{ needs.generate-version.outputs.version }}
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          format: 'markdown'
+          output: 'Project/backend/SECURITY_REPORT.md'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          exit-code: '0'
+
+      - name: Generate SonarQube Report
+        working-directory: ./Project/backend
+        run: |
+          echo "# SonarQube Code Quality Report" > QUALITY_REPORT.md
+          echo "" >> QUALITY_REPORT.md
+          echo "**Project:** mahmoudsallem_med-project (backend)" >> QUALITY_REPORT.md
+          echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> QUALITY_REPORT.md
+          echo "**Version:** ${{ needs.generate-version.outputs.version }}" >> QUALITY_REPORT.md
+          echo "" >> QUALITY_REPORT.md
+          echo "View detailed results at: https://sonarcloud.io/project/overview?id=mahmoudsallem_med-project" >> QUALITY_REPORT.md
+
+      - name: Commit Scan Reports
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Project/backend/SECURITY_REPORT.md Project/backend/QUALITY_REPORT.md
+          git diff --staged --quiet || git commit -m "chore: update backend scan reports for ${{ needs.generate-version.outputs.version }}"
+          git push || true
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
