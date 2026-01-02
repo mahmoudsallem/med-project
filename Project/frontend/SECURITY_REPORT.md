@@ -1,7 +1,7 @@
 # Security Scan Report (Trivy)
 
 **Image:** mahmoudsallem/frontend:latest
-**Scan Date:** 2026-01-02 18:03:07
+**Scan Date:** 2026-01-02 18:23:46
 **Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW
 
 ```
