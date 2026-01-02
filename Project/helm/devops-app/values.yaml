@@ -23,7 +23,7 @@ frontend:
   ingress:
     enabled: true
     ingressClassName: nginx
-    host: a01d06f1032a4460e9954daf94e0dac2-1374708381.us-east-1.elb.amazonaws.com
+    host: a684ff4eaf03c4f0da932f19d35e1630-1666340132.eu-central-1.elb.amazonaws.com
     path: /
 # -----------------------------------------------------------------------------
 # Backend Configuration
