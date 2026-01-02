@@ -59,8 +59,8 @@ jobs:
         with:
           projectBaseDir: Project/frontend
           args: >-
-            -Dsonar.projectKey=salem7ouda_med-project
-            -Dsonar.organization=salem7ouda
+            -Dsonar.projectKey=mahmoudsallem_med-project
+            -Dsonar.organization=mahmoudsallem
             -Dsonar.sources=.
 
       - name: Docker Build
@@ -82,7 +82,7 @@ jobs:
         run: |
           echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
-          echo "**Image:** salem7ouda/frontend:latest" >> SECURITY_REPORT.md
+          echo "**Image:** mahmoudsallem/frontend:latest" >> SECURITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
           echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
@@ -95,11 +95,11 @@ jobs:
         run: |
           echo "# SonarQube Code Quality Report" > QUALITY_REPORT.md
           echo "" >> QUALITY_REPORT.md
-          echo "**Project:** salem7ouda_med-project (frontend)" >> QUALITY_REPORT.md
+          echo "**Project:** mahmoudsallem_med-project (frontend)" >> QUALITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> QUALITY_REPORT.md
           echo "**Version:** latest" >> QUALITY_REPORT.md
           echo "" >> QUALITY_REPORT.md
-          echo "View detailed results at: https://sonarcloud.io/project/overview?id=salem7ouda_med-project" >> QUALITY_REPORT.md
+          echo "View detailed results at: https://sonarcloud.io/project/overview?id=mahmoudsallem_med-project" >> QUALITY_REPORT.md
 
       - name: Commit Scan Reports
         run: |
@@ -168,8 +168,8 @@ jobs:
         with:
           projectBaseDir: Project/backend
           args: >-
-            -Dsonar.projectKey=salem7ouda_med-project
-            -Dsonar.organization=salem7ouda
+            -Dsonar.projectKey=mahmoudsallem_med-project
+            -Dsonar.organization=mahmoudsallem
             -Dsonar.sources=.
             -Dsonar.python.version=3.11
 
@@ -192,7 +192,7 @@ jobs:
         run: |
           echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
-          echo "**Image:** salem7ouda/backend:latest" >> SECURITY_REPORT.md
+          echo "**Image:** mahmoudsallem/backend:latest" >> SECURITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
           echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
@@ -205,11 +205,11 @@ jobs:
         run: |
           echo "# SonarQube Code Quality Report" > QUALITY_REPORT.md
           echo "" >> QUALITY_REPORT.md
-          echo "**Project:** salem7ouda_med-project (backend)" >> QUALITY_REPORT.md
+          echo "**Project:** mahmoudsallem_med-project (backend)" >> QUALITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> QUALITY_REPORT.md
           echo "**Version:** latest" >> QUALITY_REPORT.md
           echo "" >> QUALITY_REPORT.md
-          echo "View detailed results at: https://sonarcloud.io/project/overview?id=salem7ouda_med-project" >> QUALITY_REPORT.md
+          echo "View detailed results at: https://sonarcloud.io/project/overview?id=mahmoudsallem_med-project" >> QUALITY_REPORT.md
 
       - name: Commit Scan Reports
         run: |
