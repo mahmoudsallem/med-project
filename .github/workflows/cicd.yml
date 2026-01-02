@@ -283,6 +283,7 @@ jobs:
           
           git add Project/helm/devops-app/values.yaml
           git diff --staged --quiet || git commit -m "chore: update image tags to ${{ needs.generate-version.outputs.version }}"
+          git pull --rebase origin dev
           git push
 
   argocd-sync:
