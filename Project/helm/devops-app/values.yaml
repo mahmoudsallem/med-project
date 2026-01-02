@@ -16,7 +16,7 @@ frontend:
   replicaCount: 2
   image:
     repository: mahmoudsallem/frontend
-    tag: v2026.01.02.17
+    tag: v2026.01.02.18
     pullPolicy: Always
   service:
     port: 80
@@ -32,7 +32,7 @@ backend:
   replicaCount: 1
   image:
     repository: mahmoudsallem/backend
-    tag: v2026.01.02.17
+    tag: v2026.01.02.18
     pullPolicy: IfNotPresent
   service:
     port: 5000
