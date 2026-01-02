@@ -31,7 +31,7 @@ frontend:
 backend:
   replicaCount: 1
   image:
-    repository: mahmoudsallem/backend
+    repository: salem7ouda/backend
     tag: latest
     pullPolicy: IfNotPresent
   service:
