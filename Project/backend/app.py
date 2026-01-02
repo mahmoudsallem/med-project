@@ -58,7 +58,7 @@ def get_users():
     rows = cur.fetchall()
     users = [{"name": r[0], "job": r[1], "email": r[2]} for r in rows]
     
-    # Use standzzzard JSON serialization
+    # Use standard JSON serialization
     redis_client.set("users", json.dumps(users))
     return jsonify(users)
 
