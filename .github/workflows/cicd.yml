@@ -89,14 +89,6 @@ jobs:
           docker tag ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }} ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
           docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
 
-      - name: Update Helm Values
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          sed -i "s|tag:.*|tag: ${{ github.sha }}|g" Project/helm/devops-app/values.yaml
-          git add Project/helm/devops-app/values.yaml
-          git commit -m "Update frontend image tag to ${{ github.sha }}"
-          git push
 
   backend-ci:
     needs: detect-changes
@@ -177,21 +169,46 @@ jobs:
           docker tag ${{ env.DOCKERHUB_USERNAME }}/backend:${{ github.sha }} ${{ env.DOCKERHUB_USERNAME }}/backend:latest
           docker push ${{ env.DOCKERHUB_USERNAME }}/backend:latest
 
+
+  update-helm-values:
+    needs: [detect-changes, frontend-ci, backend-ci]
+    if: |
+      always() && 
+      (needs.frontend-ci.result == 'success' || needs.backend-ci.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Update Helm Values
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          sed -i "s|tag:.*|tag: ${{ github.sha }}|g" Project/helm/devops-app/values.yaml
+          
+          # Install yq for YAML manipulation
+          wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          chmod +x /usr/local/bin/yq
+          
+          # Update image tags based on which jobs ran
+          if [ "${{ needs.frontend-ci.result }}" == "success" ]; then
+            yq -i '.frontend.image.tag = "${{ github.sha }}"' Project/helm/devops-app/values.yaml
+          fi
+          
+          if [ "${{ needs.backend-ci.result }}" == "success" ]; then
+            yq -i '.backend.image.tag = "${{ github.sha }}"' Project/helm/devops-app/values.yaml
+          fi
+          
           git add Project/helm/devops-app/values.yaml
-          git commit -m "Update backend image tag to ${{ github.sha }}"
+          git diff --staged --quiet || git commit -m "chore: update image tags to ${{ github.sha }}"
           git push
 
   argocd-sync:
-    needs: [frontend-ci, backend-ci]
-    if: |
-      always() && 
-      (needs.frontend-ci.result == 'success' || needs.frontend-ci.result == 'skipped') &&
-      (needs.backend-ci.result == 'success' || needs.backend-ci.result == 'skipped')
+    needs: [update-helm-values]
+    if: needs.update-helm-values.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger ArgoCD Sync

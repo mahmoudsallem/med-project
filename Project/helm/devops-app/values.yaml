@@ -59,7 +59,7 @@ database:
     replicaCount: 1
     image:
       repository: postgres
-      tag: 79a7b9990602354d5b3f203d652b687aa3c5f04b
+      tag: 15-alpine
     port: 5432
     db: appdb
     user: appuser
@@ -69,7 +69,7 @@ database:
     replicaCount: 1
     image:
       repository: redis
-      tag: 79a7b9990602354d5b3f203d652b687aa3c5f04b
+      tag: 7-alpine
     port: 6379
     password: redispass
 
