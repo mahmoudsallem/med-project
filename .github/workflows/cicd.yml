@@ -87,10 +87,23 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ needs.generate-version.outputs.version }}
-          format: 'markdown'
-          output: 'Project/frontend/SECURITY_REPORT.md'
+          format: 'table'
+          output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           exit-code: '0'
+
+      - name: Generate Security Report
+        working-directory: ./Project/frontend
+        run: |
+          echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
+          echo "" >> SECURITY_REPORT.md
+          echo "**Image:** mahmoudsallem/frontend:${{ needs.generate-version.outputs.version }}" >> SECURITY_REPORT.md
+          echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
+          echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
+          echo "" >> SECURITY_REPORT.md
+          echo '```' >> SECURITY_REPORT.md
+          cat ../../trivy-results.txt >> SECURITY_REPORT.md
+          echo '```' >> SECURITY_REPORT.md
 
       - name: Generate SonarQube Report
         working-directory: ./Project/frontend
@@ -187,10 +200,23 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.DOCKERHUB_USERNAME }}/backend:${{ needs.generate-version.outputs.version }}
-          format: 'markdown'
-          output: 'Project/backend/SECURITY_REPORT.md'
+          format: 'table'
+          output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           exit-code: '0'
+
+      - name: Generate Security Report
+        working-directory: ./Project/backend
+        run: |
+          echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
+          echo "" >> SECURITY_REPORT.md
+          echo "**Image:** mahmoudsallem/backend:${{ needs.generate-version.outputs.version }}" >> SECURITY_REPORT.md
+          echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
+          echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
+          echo "" >> SECURITY_REPORT.md
+          echo '```' >> SECURITY_REPORT.md
+          cat ../../trivy-results.txt >> SECURITY_REPORT.md
+          echo '```' >> SECURITY_REPORT.md
 
       - name: Generate SonarQube Report
         working-directory: ./Project/backend
