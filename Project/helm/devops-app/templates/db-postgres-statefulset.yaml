@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: {{ .Values.namespaces.db }}
+spec:
+  serviceName: "postgres"
+  replicas: {{ .Values.database.postgres.replicaCount }}
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: "{{ .Values.database.postgres.image.repository }}:{{ .Values.database.postgres.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.database.postgres.port }}
+        envFrom:
+        - secretRef:
+            name: db-secret
+        - configMapRef:
+            name: db-config
