@@ -14,8 +14,8 @@
       /* Indigo 500 */
       --primary-hover: #4f46e5;
       /* Indigo 600 */
-      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      /* Purple to Pink Gradient */
+      --bg-gradient: linear-gradient(135deg, #0093E9 0%, #80D0C7 100%);
+      /* Ocean Blue to Turquoise Gradient */
       --glass-bg: rgba(255, 255, 255, 0.03);
       --glass-border: rgba(255, 255, 255, 0.08);
       --text-main: #f8fafc;
@@ -55,7 +55,7 @@
     .navbar-brand {
       font-size: 1.5rem;
       font-weight: 700;
-      background: linear-gradient(to right, #fff, #f093fb);
+      background: linear-gradient(to right, #fff, #80D0C7);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -81,12 +81,12 @@
 
     .navbar-menu a:hover {
       background: rgba(255, 255, 255, 0.1);
-      color: #f093fb;
+      color: #80D0C7;
     }
 
     .navbar-menu a.active {
-      background: rgba(240, 147, 251, 0.2);
-      color: #f093fb;
+      background: rgba(128, 208, 199, 0.2);
+      color: #80D0C7;
     }
 
     .main-content {
@@ -271,6 +271,67 @@
       font-size: 0.875rem;
       color: var(--text-muted);
     }
+
+    /* Footer Styling */
+    .footer {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #80D0C7;
+    }
+
+    .footer-copyright {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .footer-social a {
+      color: var(--text-main);
+      font-size: 1.25rem;
+      transition: all 0.2s;
+    }
+
+    .footer-social a:hover {
+      color: #80D0C7;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 
@@ -288,27 +349,49 @@
 
   <div class="main-content">
     <div class="glass-container">
-    <h2>DevOps Team</h2>
+      <h2>DevOps Team</h2>
 
-    <form id="userForm">
-      <div class="input-group">
-        <input type="text" id="name" placeholder="Full Name" required autocomplete="off">
-      </div>
-      <div class="input-group">
-        <input type="text" id="job" placeholder="Role / Job Title" required autocomplete="off">
-      </div>
-      <div class="input-group">
-        <input type="email" id="email" placeholder="Email Address" required autocomplete="off">
-      </div>
-      <button type="submit">Add Member</button>
-    </form>
+      <form id="userForm">
+        <div class="input-group">
+          <input type="text" id="name" placeholder="Full Name" required autocomplete="off">
+        </div>
+        <div class="input-group">
+          <input type="text" id="job" placeholder="Role / Job Title" required autocomplete="off">
+        </div>
+        <div class="input-group">
+          <input type="email" id="email" placeholder="Email Address" required autocomplete="off">
+        </div>
+        <button type="submit">Add Member</button>
+      </form>
 
-    <div class="list-header">Current Members</div>
-    <ul id="userList" class="user-list">
-      <!-- Javascript will populate this -->
-    </ul>
+      <div class="list-header">Current Members</div>
+      <ul id="userList" class="user-list">
+        <!-- Javascript will populate this -->
+      </ul>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Documentation</a>
+        <a href="#">Support</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" title="GitHub">⚙️</a>
+        <a href="#" title="LinkedIn">💼</a>
+        <a href="#" title="Twitter">🐦</a>
+        <a href="#" title="Email">📧</a>
+      </div>
+      <div class="footer-copyright">
+        © 2026 DevOps Manager. All rights reserved. | Built with ❤️ by the DevOps Team
+      </div>
+    </div>
+  </footer>
 
   <script>
     const form = document.getElementById('userForm');
