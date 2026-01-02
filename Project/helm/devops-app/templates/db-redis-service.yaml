@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: {{ .Values.namespaces.db }}
+spec:
+  clusterIP: None
+  selector:
+    app: redis
+  ports:
+  - port: {{ .Values.database.redis.port }}

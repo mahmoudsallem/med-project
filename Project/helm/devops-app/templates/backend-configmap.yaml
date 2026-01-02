@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: {{ .Values.namespaces.backend }}
+data:
+  REDIS_HOST: {{ include "devops-app.redisDns" . }}
+  REDIS_PORT: "{{ .Values.backend.config.redisPort }}"
+  POSTGRES_HOST: {{ include "devops-app.postgresDns" . }}
+  POSTGRES_PORT: "{{ .Values.backend.config.postgresPort }}"
+  POSTGRES_DB: {{ .Values.backend.config.postgresDb }}
