@@ -14,8 +14,8 @@
       /* Indigo 500 */
       --primary-hover: #4f46e5;
       /* Indigo 600 */
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-      /* Deep Slate to Indigo */
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      /* Purple to Pink Gradient */
       --glass-bg: rgba(255, 255, 255, 0.03);
       --glass-border: rgba(255, 255, 255, 0.08);
       --text-main: #f8fafc;
@@ -33,10 +33,68 @@
       color: var(--text-main);
       min-height: 100vh;
       margin: 0;
+      padding: 0;
+    }
+
+    /* Navigation Menu */
+    .navbar {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #fff, #f093fb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    .navbar-menu {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar-menu a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+
+    .navbar-menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f093fb;
+    }
+
+    .navbar-menu a.active {
+      background: rgba(240, 147, 251, 0.2);
+      color: #f093fb;
+    }
+
+    .main-content {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1rem;
+      padding: 2rem 1rem;
+      min-height: calc(100vh - 80px);
     }
 
     /* Glassmorphism Card */
@@ -217,8 +275,19 @@
 </head>
 
 <body>
+  <!-- Navigation Menu -->
+  <nav class="navbar">
+    <div class="navbar-brand">DevOps Manager</div>
+    <ul class="navbar-menu">
+      <li><a href="#" class="active">Team</a></li>
+      <li><a href="#">Projects</a></li>
+      <li><a href="#">Analytics</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+  </nav>
 
-  <div class="glass-container">
+  <div class="main-content">
+    <div class="glass-container">
     <h2>DevOps Team</h2>
 
     <form id="userForm">
@@ -238,6 +307,7 @@
     <ul id="userList" class="user-list">
       <!-- Javascript will populate this -->
     </ul>
+    </div>
   </div>
 
   <script>
