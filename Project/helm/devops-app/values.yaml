@@ -17,7 +17,7 @@ frontend:
   replicaCount: 2
   image:
     repository: mahmoudsallem/frontend
-    tag: v4
+    tag: 79a7b9990602354d5b3f203d652b687aa3c5f04b
     pullPolicy: Always
 
   service:
@@ -37,7 +37,7 @@ backend:
   replicaCount: 1
   image:
     repository: mahmoudsallem/backend
-    tag: v1
+    tag: 79a7b9990602354d5b3f203d652b687aa3c5f04b
     pullPolicy: IfNotPresent
   service:
     port: 5000
@@ -59,7 +59,7 @@ database:
     replicaCount: 1
     image:
       repository: postgres
-      tag: 15-alpine
+      tag: 79a7b9990602354d5b3f203d652b687aa3c5f04b
     port: 5432
     db: appdb
     user: appuser
@@ -69,7 +69,7 @@ database:
     replicaCount: 1
     image:
       repository: redis
-      tag: 7-alpine
+      tag: 79a7b9990602354d5b3f203d652b687aa3c5f04b
     port: 6379
     password: redispass
 
