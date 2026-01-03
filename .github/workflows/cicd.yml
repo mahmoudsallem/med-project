@@ -316,9 +316,10 @@ jobs:
 
 
 
-  update-helm-values:
-    needs: [detect-changes, frontend-ci, backend-ci]
-    if: |
+  # DISABLED: Prevents version increment loop when Docker push fails
+  # update-helm-values:
+  #   needs: [detect-changes, frontend-ci, backend-ci]
+  #   if: false
       always() && 
       (needs.frontend-ci.result == 'success' || needs.backend-ci.result == 'success')
     runs-on: ubuntu-latest
@@ -357,9 +358,9 @@ jobs:
           git pull --rebase origin dev
           git push
 
-  argocd-sync:
-    needs: [update-helm-values]
-    if: needs.update-helm-values.result == 'success'
+  # DISABLED: Depends on update-helm-values
+  # argocd-sync:
+  #   if: false
     runs-on: ubuntu-latest
     steps:
       - name: Trigger ArgoCD Sync
