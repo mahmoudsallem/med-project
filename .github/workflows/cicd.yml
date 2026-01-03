@@ -317,49 +317,51 @@ jobs:
 
 
   # DISABLED: Prevents version increment loop when Docker push fails
+  # Re-enable after fixing Docker Hub authentication and verifying builds work
   # update-helm-values:
   #   needs: [detect-changes, frontend-ci, backend-ci]
-  #   if: false
-      always() && 
-      (needs.frontend-ci.result == 'success' || needs.backend-ci.result == 'success')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  #   if: |
+  #     always() && 
+  #     (needs.frontend-ci.result == 'success' || needs.backend-ci.result == 'success')
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #
+  #     - name: Update Helm Values
+  #       run: |
+  #         git config user.name "github-actions[bot]"
+  #         git config user.email "github-actions[bot]@users.noreply.github.com"
+  #         
+  #         # Install yq for YAML manipulation
+  #         wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+  #         chmod +x /usr/local/bin/yq
+  #         
+  #         # Update image tags based on which jobs ran successfully
+  #         if [ "${{ needs.frontend-ci.result }}" == "success" ]; then
+  #           FRONTEND_VERSION="${{ needs.frontend-ci.outputs.version }}"
+  #           yq -i ".frontend.image.tag = \"$FRONTEND_VERSION\"" Project/helm/devops-app/values.yaml
+  #           echo "✅ Updated frontend to version: $FRONTEND_VERSION"
+  #         fi
+  #         
+  #         if [ "${{ needs.backend-ci.result }}" == "success" ]; then
+  #           BACKEND_VERSION="${{ needs.backend-ci.outputs.version }}"
+  #           yq -i ".backend.image.tag = \"$BACKEND_VERSION\"" Project/helm/devops-app/values.yaml
+  #           echo "✅ Updated backend to version: $BACKEND_VERSION"
+  #         fi
+  #         
+  #         git add Project/helm/devops-app/values.yaml
+  #         git diff --staged --quiet || git commit -m "chore: update image tags to new versions"
+  #         git pull --rebase origin dev
+  #         git push
 
-      - name: Update Helm Values
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Install yq for YAML manipulation
-          wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          chmod +x /usr/local/bin/yq
-          
-          # Update image tags based on which jobs ran successfully
-          if [ "${{ needs.frontend-ci.result }}" == "success" ]; then
-            FRONTEND_VERSION="${{ needs.frontend-ci.outputs.version }}"
-            yq -i ".frontend.image.tag = \"$FRONTEND_VERSION\"" Project/helm/devops-app/values.yaml
-            echo "✅ Updated frontend to version: $FRONTEND_VERSION"
-          fi
-          
-          if [ "${{ needs.backend-ci.result }}" == "success" ]; then
-            BACKEND_VERSION="${{ needs.backend-ci.outputs.version }}"
-            yq -i ".backend.image.tag = \"$BACKEND_VERSION\"" Project/helm/devops-app/values.yaml
-            echo "✅ Updated backend to version: $BACKEND_VERSION"
-          fi
-          
-          git add Project/helm/devops-app/values.yaml
-          git diff --staged --quiet || git commit -m "chore: update image tags to new versions"
-          git pull --rebase origin dev
-          git push
-
-  # DISABLED: Depends on update-helm-values
+  # DISABLED: Depends on update-helm-values job
   # argocd-sync:
+  #   needs: [update-helm-values]
   #   if: false
     runs-on: ubuntu-latest
     steps:
