@@ -36,9 +36,42 @@ jobs:
       packages: write
     env:
       APP_NAME: frontend
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Version Tag
+        id: version
+        run: |
+          # Fetch all tags
+          git fetch --tags
+          
+          # Get the latest tag for frontend (format: frontend-v1.0.0)
+          LATEST_TAG=$(git tag -l "frontend-v*" | sort -V | tail -n 1)
+          
+          if [ -z "$LATEST_TAG" ]; then
+            # No existing tag, start with v1.0.0
+            NEW_VERSION="v1.0.0"
+          else
+            # Extract version number (remove 'frontend-v' prefix)
+            CURRENT_VERSION=${LATEST_TAG#frontend-v}
+            
+            # Split version into major.minor.patch
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+            
+            # Increment patch version
+            PATCH=$((PATCH + 1))
+            
+            NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+          fi
+          
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "tag=frontend-$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "📦 New version: $NEW_VERSION"
 
       - name: Validate HTML
         working-directory: ./Project/frontend
@@ -66,12 +99,13 @@ jobs:
       - name: Docker Build
         working-directory: ./Project/frontend
         run: |
-          docker build -t ${{ env.DOCKERHUB_USERNAME }}/frontend:latest .
+          docker build -t ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }} \
+                       -t ${{ env.DOCKERHUB_USERNAME }}/frontend:latest .
 
       - name: Trivy Scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
+          image-ref: ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }}
           format: 'table'
           output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
@@ -82,7 +116,7 @@ jobs:
         run: |
           echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
-          echo "**Image:** mahmoudsallem/frontend:latest" >> SECURITY_REPORT.md
+          echo "**Image:** mahmoudsallem/frontend:${{ steps.version.outputs.version }}" >> SECURITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
           echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
@@ -97,7 +131,7 @@ jobs:
           echo "" >> QUALITY_REPORT.md
           echo "**Project:** mahmoudsallem_med-project (frontend)" >> QUALITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> QUALITY_REPORT.md
-          echo "**Version:** latest" >> QUALITY_REPORT.md
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> QUALITY_REPORT.md
           echo "" >> QUALITY_REPORT.md
           echo "View detailed results at: https://sonarcloud.io/project/overview?id=mahmoudsallem_med-project" >> QUALITY_REPORT.md
 
@@ -117,7 +151,16 @@ jobs:
 
       - name: Push Docker Image
         run: |
+          docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }}
           docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
+
+      - name: Create Git Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.version.outputs.tag }}" -m "Release frontend ${{ steps.version.outputs.version }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
 
 
   backend-ci:
@@ -129,9 +172,42 @@ jobs:
       packages: write
     env:
       APP_NAME: backend
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Version Tag
+        id: version
+        run: |
+          # Fetch all tags
+          git fetch --tags
+          
+          # Get the latest tag for backend (format: backend-v1.0.0)
+          LATEST_TAG=$(git tag -l "backend-v*" | sort -V | tail -n 1)
+          
+          if [ -z "$LATEST_TAG" ]; then
+            # No existing tag, start with v1.0.0
+            NEW_VERSION="v1.0.0"
+          else
+            # Extract version number (remove 'backend-v' prefix)
+            CURRENT_VERSION=${LATEST_TAG#backend-v}
+            
+            # Split version into major.minor.patch
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+            
+            # Increment patch version
+            PATCH=$((PATCH + 1))
+            
+            NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+          fi
+          
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "tag=backend-$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "📦 New version: $NEW_VERSION"
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -176,12 +252,13 @@ jobs:
       - name: Docker Build
         working-directory: ./Project/backend
         run: |
-          docker build -t ${{ env.DOCKERHUB_USERNAME }}/backend:latest .
+          docker build -t ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }} \
+                       -t ${{ env.DOCKERHUB_USERNAME }}/backend:latest .
 
       - name: Trivy Scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.DOCKERHUB_USERNAME }}/backend:latest
+          image-ref: ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }}
           format: 'table'
           output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
@@ -192,7 +269,7 @@ jobs:
         run: |
           echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
-          echo "**Image:** mahmoudsallem/backend:latest" >> SECURITY_REPORT.md
+          echo "**Image:** mahmoudsallem/backend:${{ steps.version.outputs.version }}" >> SECURITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
           echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
@@ -207,7 +284,7 @@ jobs:
           echo "" >> QUALITY_REPORT.md
           echo "**Project:** mahmoudsallem_med-project (backend)" >> QUALITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> QUALITY_REPORT.md
-          echo "**Version:** latest" >> QUALITY_REPORT.md
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> QUALITY_REPORT.md
           echo "" >> QUALITY_REPORT.md
           echo "View detailed results at: https://sonarcloud.io/project/overview?id=mahmoudsallem_med-project" >> QUALITY_REPORT.md
 
@@ -227,7 +304,16 @@ jobs:
 
       - name: Push Docker Image
         run: |
+          docker push ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }}
           docker push ${{ env.DOCKERHUB_USERNAME }}/backend:latest
+
+      - name: Create Git Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.version.outputs.tag }}" -m "Release backend ${{ steps.version.outputs.version }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
 
 
   update-helm-values:
@@ -253,17 +339,21 @@ jobs:
           wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           chmod +x /usr/local/bin/yq
           
-          # Update image tags to 'latest' based on which jobs ran
+          # Update image tags based on which jobs ran successfully
           if [ "${{ needs.frontend-ci.result }}" == "success" ]; then
-            yq -i '.frontend.image.tag = "latest"' Project/helm/devops-app/values.yaml
+            FRONTEND_VERSION="${{ needs.frontend-ci.outputs.version }}"
+            yq -i ".frontend.image.tag = \"$FRONTEND_VERSION\"" Project/helm/devops-app/values.yaml
+            echo "✅ Updated frontend to version: $FRONTEND_VERSION"
           fi
           
           if [ "${{ needs.backend-ci.result }}" == "success" ]; then
-            yq -i '.backend.image.tag = "latest"' Project/helm/devops-app/values.yaml
+            BACKEND_VERSION="${{ needs.backend-ci.outputs.version }}"
+            yq -i ".backend.image.tag = \"$BACKEND_VERSION\"" Project/helm/devops-app/values.yaml
+            echo "✅ Updated backend to version: $BACKEND_VERSION"
           fi
           
           git add Project/helm/devops-app/values.yaml
-          git diff --staged --quiet || git commit -m "chore: update image tags to latest"
+          git diff --staged --quiet || git commit -m "chore: update image tags to new versions"
           git pull --rebase origin dev
           git push
 
