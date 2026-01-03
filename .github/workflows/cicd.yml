@@ -317,13 +317,13 @@ jobs:
 
 
 
-  # DISABLED: Prevents version increment loop when Docker push fails
-  # update-helm-values:
-  #   needs: [detect-changes, frontend-ci, backend-ci]
-  #   if: false
-    (needs.frontend-ci.result == 'success' || needs.backend-ci.result == 'success')
-  runs-on: ubuntu-latest
-  permis|:
+  update-helm-values:
+    needs: [detect-changes, frontend-ci, backend-ci]
+    if: |
+      always() && 
+      (needs.frontend-ci.result == 'success' || needs.backend-ci.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
       contents: write
     steps:
       - name: Checkout code
