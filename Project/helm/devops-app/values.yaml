@@ -15,7 +15,7 @@ namespaces:
 frontend:
   replicaCount: 2
   image:
-    repository: mahmoudsallem/frontend
+    repository: salem7ouda/frontend
     tag: latest
     pullPolicy: Always
   service:
@@ -31,7 +31,7 @@ frontend:
 backend:
   replicaCount: 2
   image:
-    repository: mahmoudsallem/backend
+    repository: salem7ouda/backend
     tag: latest
     pullPolicy: Always
   service:
