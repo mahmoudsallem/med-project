@@ -7,7 +7,7 @@ on:
 
 # 1. Workflow-level env (available to all jobs)
 env:
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_USERNAME: salem7ouda
   PYTHON_VERSION: '3.11'
 
 jobs:
