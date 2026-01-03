@@ -1,7 +1,7 @@
 # Security Scan Report (Trivy)
 
-**Image:** mahmoudsallem/frontend:v1.0.0
-**Scan Date:** 2026-01-03 03:57:17
+**Image:** mahmoudsallem/frontend:v1.0.1
+**Scan Date:** 2026-01-03 12:02:39
 **Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW
 
 ```
@@ -11,7 +11,7 @@ Report Summary
 ┌────────────────────────────────────────────┬────────┬─────────────────┬─────────┐
 │                   Target                   │  Type  │ Vulnerabilities │ Secrets │
 ├────────────────────────────────────────────┼────────┼─────────────────┼─────────┤
-│ salem7ouda/frontend:v1.0.0 (alpine 3.23.2) │ alpine │        0        │    -    │
+│ salem7ouda/frontend:v1.0.1 (alpine 3.23.2) │ alpine │        0        │    -    │
 └────────────────────────────────────────────┴────────┴─────────────────┴─────────┘
 Legend:
 - '-': Not scanned
