@@ -19,6 +19,9 @@ jobs:
       backend: ${{ steps.filter.outputs.backend }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for proper change detection
+      
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -27,6 +30,12 @@ jobs:
               - 'Project/frontend/**'
             backend:
               - 'Project/backend/**'
+      
+      - name: Show detected changes
+        run: |
+          echo "🔍 Change Detection Results:"
+          echo "Frontend changed: ${{ steps.filter.outputs.frontend }}"
+          echo "Backend changed: ${{ steps.filter.outputs.backend }}"
 
   frontend-ci:
     needs: [detect-changes]
