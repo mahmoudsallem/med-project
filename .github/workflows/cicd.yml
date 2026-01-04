@@ -8,7 +8,7 @@ on:
 # 1. Workflow-level env (available to all jobs)
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  PYTHON_VERSION: '3.11'
+  PYTHON_VERSION: '3.13'
 
 
 jobs:
@@ -264,7 +264,7 @@ jobs:
             -Dsonar.projectKey=mahmoudsallem_med-project
             -Dsonar.organization=mahmoudsallem
             -Dsonar.sources=.
-            -Dsonar.python.version=3.11
+            -Dsonar.python.version=3.13
 
       - name: Docker Build
         working-directory: ./Project/backend
