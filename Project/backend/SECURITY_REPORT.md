@@ -1,7 +1,7 @@
 # Security Scan Report (Trivy)
 
-**Image:** salem7ouda/backend:v1.0.16
-**Scan Date:** 2026-01-04 09:00:03
+**Image:** salem7ouda/backend:v1.0.17
+**Scan Date:** 2026-01-04 09:05:32
 **Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW
 
 ```
@@ -11,81 +11,29 @@ Report Summary
 ┌──────────────────────────────────────────────────────────────────────────────────┬────────────┬─────────────────┬─────────┐
 │                                      Target                                      │    Type    │ Vulnerabilities │ Secrets │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ salem7ouda/backend:v1.0.16 (debian 13.2)                                         │   debian   │       61        │    -    │
+│ salem7ouda/backend:v1.0.17 (debian 13.2)                                         │   debian   │       61        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/blinker-1.9.0.dist-info/METADATA          │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/blinker-1.9.0.dist-info/METADATA          │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/click-8.3.1.dist-info/METADATA            │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/click-8.3.1.dist-info/METADATA            │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/flask-3.1.2.dist-info/METADATA            │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/flask-3.1.2.dist-info/METADATA            │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/flask_cors-6.0.2.dist-info/METADATA       │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/flask_cors-6.0.2.dist-info/METADATA       │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/itsdangerous-2.2.0.dist-info/METADATA     │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/itsdangerous-2.2.0.dist-info/METADATA     │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/jinja2-3.1.6.dist-info/METADATA           │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/jinja2-3.1.6.dist-info/METADATA           │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/markupsafe-3.0.3.dist-info/METADATA       │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/markupsafe-3.0.3.dist-info/METADATA       │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/pip-24.0.dist-info/METADATA               │ python-pkg │        1        │    -    │
+│ usr/local/lib/python3.13/site-packages/pip-25.3.dist-info/METADATA               │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/psycopg2_binary-2.9.11.dist-info/METADATA │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/psycopg2_binary-2.9.11.dist-info/METADATA │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/redis-7.1.0.dist-info/METADATA            │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/redis-7.1.0.dist-info/METADATA            │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools-79.0.1.dist-info/METADATA      │ python-pkg │        0        │    -    │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/autocommand-2.2.2.dis- │ python-pkg │        0        │    -    │
-│ t-info/METADATA                                                                  │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/backports.tarfile-1.2- │ python-pkg │        0        │    -    │
-│ .0.dist-info/METADATA                                                            │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/importlib_metadata-8.- │ python-pkg │        0        │    -    │
-│ 0.0.dist-info/METADATA                                                           │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/inflect-7.3.1.dist-in- │ python-pkg │        0        │    -    │
-│ fo/METADATA                                                                      │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/jaraco.collections-5.- │ python-pkg │        0        │    -    │
-│ 1.0.dist-info/METADATA                                                           │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/jaraco.context-5.3.0.- │ python-pkg │        0        │    -    │
-│ dist-info/METADATA                                                               │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/jaraco.functools-4.0.- │ python-pkg │        0        │    -    │
-│ 1.dist-info/METADATA                                                             │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/jaraco.text-3.12.1.di- │ python-pkg │        0        │    -    │
-│ st-info/METADATA                                                                 │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/more_itertools-10.3.0- │ python-pkg │        0        │    -    │
-│ .dist-info/METADATA                                                              │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/packaging-24.2.dist-i- │ python-pkg │        0        │    -    │
-│ nfo/METADATA                                                                     │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/platformdirs-4.2.2.di- │ python-pkg │        0        │    -    │
-│ st-info/METADATA                                                                 │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/tomli-2.0.1.dist-info- │ python-pkg │        0        │    -    │
-│ /METADATA                                                                        │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/typeguard-4.3.0.dist-- │ python-pkg │        0        │    -    │
-│ info/METADATA                                                                    │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/typing_extensions-4.1- │ python-pkg │        0        │    -    │
-│ 2.2.dist-info/METADATA                                                           │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/wheel-0.45.1.dist-inf- │ python-pkg │        0        │    -    │
-│ o/METADATA                                                                       │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/setuptools/_vendor/zipp-3.19.2.dist-info- │ python-pkg │        0        │    -    │
-│ /METADATA                                                                        │            │                 │         │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/werkzeug-3.1.4.dist-info/METADATA         │ python-pkg │        0        │    -    │
-├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ usr/local/lib/python3.11/site-packages/wheel-0.45.1.dist-info/METADATA           │ python-pkg │        0        │    -    │
+│ usr/local/lib/python3.13/site-packages/werkzeug-3.1.4.dist-info/METADATA         │ python-pkg │        0        │    -    │
 └──────────────────────────────────────────────────────────────────────────────────┴────────────┴─────────────────┴─────────┘
 Legend:
 - '-': Not scanned
@@ -101,7 +49,7 @@ Learn more and start using VEX: https://trivy.dev/docs/v0.68/guide/supply-chain/
 To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
 
 
-salem7ouda/backend:v1.0.16 (debian 13.2)
+salem7ouda/backend:v1.0.17 (debian 13.2)
 ========================================
 Total: 61 (LOW: 51, MEDIUM: 10, HIGH: 0, CRITICAL: 0)
 
@@ -343,15 +291,4 @@ Total: 61 (LOW: 51, MEDIUM: 10, HIGH: 0, CRITICAL: 0)
 │                │                     │          │          │                         │               │ and chsh when compiled...                                    │
 │                │                     │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2022-0563                    │
 └────────────────┴─────────────────────┴──────────┴──────────┴─────────────────────────┴───────────────┴──────────────────────────────────────────────────────────────┘
-
-Python (python-pkg)
-===================
-Total: 1 (LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
-
-┌────────────────┬───────────────┬──────────┬────────┬───────────────────┬───────────────┬─────────────────────────────────────────────────────┐
-│    Library     │ Vulnerability │ Severity │ Status │ Installed Version │ Fixed Version │                        Title                        │
-├────────────────┼───────────────┼──────────┼────────┼───────────────────┼───────────────┼─────────────────────────────────────────────────────┤
-│ pip (METADATA) │ CVE-2025-8869 │ MEDIUM   │ fixed  │ 24.0              │ 25.3          │ pip: pip missing checks on symbolic link extraction │
-│                │               │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2025-8869           │
-└────────────────┴───────────────┴──────────┴────────┴───────────────────┴───────────────┴─────────────────────────────────────────────────────┘
 ```
