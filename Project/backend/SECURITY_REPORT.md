@@ -1,7 +1,7 @@
 # Security Scan Report (Trivy)
 
-**Image:** mahmoudsallem/backend:v1.0.11
-**Scan Date:** 2026-01-04 04:35:56
+**Image:** salem7ouda/backend:v1.0.12
+**Scan Date:** 2026-01-04 07:47:01
 **Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW
 
 ```
@@ -11,7 +11,7 @@ Report Summary
 ┌──────────────────────────────────────────────────────────────────────────────────┬────────────┬─────────────────┬─────────┐
 │                                      Target                                      │    Type    │ Vulnerabilities │ Secrets │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ salem7ouda/backend:v1.0.11 (debian 13.2)                                         │   debian   │       61        │    -    │
+│ salem7ouda/backend:v1.0.12 (debian 13.2)                                         │   debian   │       61        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
 │ usr/local/lib/python3.11/site-packages/blinker-1.9.0.dist-info/METADATA          │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
@@ -101,7 +101,7 @@ Learn more and start using VEX: https://trivy.dev/docs/v0.68/guide/supply-chain/
 To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
 
 
-salem7ouda/backend:v1.0.11 (debian 13.2)
+salem7ouda/backend:v1.0.12 (debian 13.2)
 ========================================
 Total: 61 (LOW: 51, MEDIUM: 10, HIGH: 0, CRITICAL: 0)
 
