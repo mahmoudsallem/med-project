@@ -24,3 +24,5 @@ spec:
             name: db-secret
         - configMapRef:
             name: db-config
+        resources:
+          {{- toYaml .Values.database.postgres.resources | nindent 10 }}

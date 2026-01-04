@@ -126,7 +126,7 @@ jobs:
         run: |
           echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
-          echo "**Image:** mahmoudsallem/frontend:${{ steps.version.outputs.version }}" >> SECURITY_REPORT.md
+          echo "**Image:** ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }}" >> SECURITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
           echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
@@ -286,7 +286,7 @@ jobs:
         run: |
           echo "# Security Scan Report (Trivy)" > SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md
-          echo "**Image:** mahmoudsallem/backend:${{ steps.version.outputs.version }}" >> SECURITY_REPORT.md
+          echo "**Image:** ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }}" >> SECURITY_REPORT.md
           echo "**Scan Date:** $(date +'%Y-%m-%d %H:%M:%S')" >> SECURITY_REPORT.md
           echo "**Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW" >> SECURITY_REPORT.md
           echo "" >> SECURITY_REPORT.md

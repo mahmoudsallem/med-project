@@ -15,6 +15,10 @@ spec:
       labels:
         app: backend
     spec:
+      {{- if .Values.imageCredentials.enabled }}
+      imagePullSecrets:
+      - name: {{ .Values.imageCredentials.name }}
+      {{- end }}
       initContainers:
       - name: wait-for-services
         image: busybox
@@ -38,9 +42,19 @@ spec:
               sleep 2
             done
             echo "Postgres is up!"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
       containers:
       - name: backend
         image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+        resources:
+          {{- toYaml .Values.backend.resources | nindent 10 }}
         ports:
         - containerPort: {{ .Values.backend.service.port }}
         envFrom:

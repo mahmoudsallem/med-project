@@ -4,26 +4,19 @@ kind: Ingress
 metadata:
   name: frontend-ingress
   namespace: {{ .Values.namespaces.frontend }}
-  labels:
-    app.kubernetes.io/name: frontend
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: Helm
 spec:
   ingressClassName: {{ .Values.frontend.ingress.ingressClassName }}
+  {{- if .Values.frontend.tls.enabled }}
+  tls:
+  - hosts:
+    - {{ .Values.frontend.ingress.host }}
+    secretName: {{ .Values.frontend.tls.secretName }}
+  {{- end }}
   rules:
   - host: {{ .Values.frontend.ingress.host }}
     http:
       paths:
-      - path: {{ .Values.frontend.ingress.path }}
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend
-            port:
-              number: {{ .Values.frontend.service.port }}
-  - http:
-      paths:
-      - path: {{ .Values.frontend.ingress.path }}
+      - path: /
         pathType: Prefix
         backend:
           service:
