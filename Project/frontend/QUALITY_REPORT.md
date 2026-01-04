@@ -1,7 +1,7 @@
 # SonarQube Code Quality Report
 
 **Project:** mahmoudsallem_med-project (frontend)
-**Scan Date:** 2026-01-04 10:15:50
-**Version:** v1.0.28
+**Scan Date:** 2026-01-04 10:46:12
+**Version:** v1.0.29
 
 View detailed results at: https://sonarcloud.io/project/overview?id=mahmoudsallem_med-project
