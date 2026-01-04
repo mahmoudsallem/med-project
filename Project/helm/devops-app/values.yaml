@@ -1,7 +1,7 @@
 # =============================================================================
 # DevOps App Helm Chart - values.yaml
 # =============================================================================
-
+# 
 # -----------------------------------------------------------------------------
 # Namespaces
 # -----------------------------------------------------------------------------
@@ -9,15 +9,16 @@ namespaces:
   frontend: frontend-ns
   backend: backend-ns
   db: db-ns
-
 # -----------------------------------------------------------------------------
+
 # Frontend Configuration
+
 # -----------------------------------------------------------------------------
 frontend:
   replicaCount: 1
   image:
     repository: salem7ouda/frontend
-    tag: v1.0.14
+    tag: v1.0.15
     pullPolicy: Always
   service:
     port: 80
@@ -38,22 +39,26 @@ frontend:
       cpu: 200m
       memory: 256Mi
   # TLS Configuration
+
   tls:
     enabled: false
     secretName: frontend-tls-secret
     # Base64-encoded TLS certificate
+
     crt: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURGekNDQWYrZ0F3SUJBZ0lVVXFlSFlmMHdEOFFQTjVDSVV6QVFVMmlvWjVBd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0d6RVpNQmNHQTFVRUF3d1Fabkp2Ym5SbGJtUXViblJwTG1OdmJUQWVGdzB5TmpBeE1ERXhPVE13TVRCYQpGdzB5TnpBeE1ERXhPVE13TVRCYU1Cc3hHVEFYQmdOVkJBTU1FR1p5YjI1MFpXNWtMbTUwYVM1amIyMHdnZ0VpCk1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQ1dqQXErWGRObTE0M2NmY0xhZE01TENtY0oKN2RmTEh3V3J6OGpXWUdvOTdXcFU2VGcwSlhjU3B2UXhXVytxYVBsdStSY1U0Wm1MYTZkTFBjWUdxblJPbFJybAplREEzZktuY2VNMmhPeUV1UWhuR2pqR0MvaS9HZ1FZUjU5cWJLWDJKVjdITWQ0UmF1UU04dUVyQzVBaHRCRWNrCmxCVStQNlVzcFY0OU1ZcDkzZnhJREJCMVFFaFVGSUo1aGFYZW4vRWNPa0JXYWNpOVF5VG53MGJHVVdrTm5wTGIKVzdla1FHb1J2a1RUVWZIVFg2MDNkaHREbEplUXZCeVhGK3lHc09sRFptT2kxT3pQZCs1OG0xTWd5SUVOTXP6bVYKUHhpU0wwdWpIeVFOdTA1NVBpaGhTZlpFVk0vdE5XMTJlNTY5enBqQ3k1Vy9hL21YWEcrYzcvUzFkViszQWdNQgpBQUdqVXpCUk1CMEdBMVVkRGdRV0JCVDZIOGJYMm9mU0ZtN3Fob296NXJUQTE3Ry9lVEFmQmdOVkhTTUVHREFXCmdCVDZIOGJYMm9mU0ZtN3Fob296NXJUQTE3Ry9lVEFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFDQnlKTUNNU2pIV2VkWVBTMmYwRVBraTR5V25VWUprb1B0OStYYWFGRGpYUXVWeklVQgpON0hjWnIrVkdEWDBtOUh3UVdWZS8yNFNXYkE5dDdnSzl2U21DazBnQW8xaGZKODdONnl6RHpjSDZtYXByNUYzCnNpRUlaNlVMbm0wUXZLRzZTR29Ca1hMY1IvYkpPQ1NSUkR2NjYwT3hBSUxXWE1qV3RiaE5OcG0xb0pyUTd3SEIKUkZxQ3F5QUJNRmhpRkNlOURXQS9PemxHeXFYTm5tQ0p3aGRaYy9RNW5xaC9XaWh4eVZpVEh6ZFFYWjYrWUx1agowbnJNVFpkZm8wZDBycGs1UEFNMUV4WnB0VThOOVRpZTlRbFJnNUlCRXdiTjJsS0d1OUgyWVh4ZFFxMTdFejlNCmNGOUxPUTZrKzF1djhKajZxZ1hDVlF2R3p5NzVvRWN3ekRkRwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
     # Base64-encoded TLS private key
-    key: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRQ1dqQXErWGRObTE0M2MKZmNMYWRNNUxDbWNKN2RmTEh3V3J6OGpXWUdvOTdXcFU2VGcwSlhjU3B2UXhXVytxYVBsdStSY1U0Wm1MYTZkTApQY1lHcW5ST2xScmxlREEzZktuY2VNMmhPeUV1UWhuR2pqR0MvaS9HZ1FZUjU5cWJLWDJKVjdITWQ0UmF1UU04CnVFckM1QWh0QkVja2xCVStQNlVzcFY0OU1ZcDkzZnhJREJCMVFFaFVGSUo1aGFYZW4vRWNPa0JXYWNpOVF5VG4KdzBiR1VXa05ucExiVzdla1FHb1J2a1RUVWZIVFg2MDNkaHREbEplUXZCeVhGK3lHc09sRFptT2kxT3pQZCs1OAptMU1neUlFTk16bVZQeGlTTDB1akh5UU51MDU1UGloaFNmWkVWTS90TlcxMmU1Njl6cGpDeTVXL2EvbVhYRytjCjcvUzFkViszQWdNQkFBRUNnZ0VBRTg3alR2N3JaTm14eWJRbVlqWUNPcTlvdFU2OUdQWEEra1ZCcUt0UTcwc0EKdGFGbUNyNXZOMTRPUFR3R1RFYTVveGRWS1NNeDM3MVBhci83QVQrR1JCeXNTRXNURlFuckU1NDFlQ1JlamthVwpPNkRUOU9kYkErUlFGeVVKaDJiaktLSU1POW54NlRuMHFoV1ppS0VXVnJtOFhweTVXdEptK2tQYjdYTktSSnN2Ci93c2FGTXYxZ2sxQnUzNno2WlBoMFl2c0g5OTBWVUtNKzhJdUFsWFlLb2w0Z1p0NFp1VGVXMlptaGo3Rmhaencvb0FMQHN5YU9wSUVYcEE0TTZnWkhRVVI1UG9qbURaaTJFK0c5ZFF0dWJSU0hDU2NldXBSYVprUldRYzN5aULibUQKcVMzZGpHUG5YZmpldGxXc3Bmb2ROeWpmZ1lRV1FRczhOZmdLYjJadXFRS0JnUURIQjNqYmYrblhsNkpNRmt2YgpaZGI0Mk1qOFhuVE1vdFhTS2VmdVVqM01PbVoybS92THBoenpwa3JSSktpSmU2YUdjakFuMTZRMmpiQzVaajFVCm1qaE11dE1mZ21jSzlOSmRyQTkvcGZkU2hPV2hqUUdVVDJXS05RNFFVemhVWkNxMEhuVXdUcXczTDdkT1lVdlYKSTV3T0xWcDA0NzQzNHdhblQ0L2NTR0xFRFFLQmdRREJvK0R0TFBqTGt1UE1RcDJIMy9ENlBXVE9hUFpRaTJTOApjNW9vVUZZb2hwTlBpOUoxUW1uRENvYlhKY0lkNTBCVkgrMkdsVmNxZWhlcmQvcXZpQjIxeFRXVCtMdGhFNWRBCmE3YzFsNWE0NHZDWk5DWlk3RlJLVFJ2dFQ0c0lubXhqV1JUZ3V3cDhQazFTMmtZc1BJUU9zZUZqaHFKenpKTmQKa1UvUWVwV3Qwd0tCZ1FDM0Q2bGJBeGtiZ2szMSsrQUR5WFRqNThsZFRxZlJmTWg4aUt6WjZHME14bjV1QStTaQpHSVNxVXcrbnRFWER0cWFoTExBY1JWeTJETGNLbi80ekxiSXc2UG05RnAwZVY3YVNEK3NsZG9xNExLSmxhQ09XCnZUeGcxWkc4OUQ1d2FMMWFkRlZIZkdVc1VVZ2g0SjMyU2N2b3NoQnNTUGt4d0MvamZldU5La3NsbFFLQmdRQ2UKeE9hOHNQNEJ0SnZRcytJRUt0dHI0b0RQK1NIVTRxWWpHa29RdWVZYTdsVEVpU2x6ZVpQTUZzcCtoM2dGR3NJVgp5Y3J3YVd5QjZIK1YyUmNUYTNDb3hGenN5YW1ocS9WOUhaU25mWFpZZThLNGF4anlHanYyZkFqazZDNWdUNzBoCkxENUJFVHRFcWJTdXRVZUtKOGhEWURna2FaU3ppODVjanJPNWhYbEtmd0tCZ0ZzVlZ3SUZpSzZVeDBEcVFvQXAKbEtjdGhmc3dEUytyaFplb1ZsNW5KLytYZFBscnZuR2ZTQTYnV2xjL0ZDemZaaXVaWkdidkZGSHZrLyt0RVVvQwpvMXBrM2xYMHVTTW1oM0taaDc2TDE1RkZrU1NDemw1M0hVQkwxT2RTSDBFL1ppdC8raFdiUWc5bnZ2b01xL3VjCnQ0djRjZUlEYlN5a0ZYL0NVVkRuRGdRQwotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tCg=="
 
+    key: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRQ1dqQXErWGRObTE0M2MKZmNMYWRNNUxDbWNKN2RmTEh3V3J6OGpXWUdvOTdXcFU2VGcwSlhjU3B2UXhXVytxYVBsdStSY1U0Wm1MYTZkTApQY1lHcW5ST2xScmxlREEzZktuY2VNMmhPeUV1UWhuR2pqR0MvaS9HZ1FZUjU5cWJLWDJKVjdITWQ0UmF1UU04CnVFckM1QWh0QkVja2xCVStQNlVzcFY0OU1ZcDkzZnhJREJCMVFFaFVGSUo1aGFYZW4vRWNPa0JXYWNpOVF5VG4KdzBiR1VXa05ucExiVzdla1FHb1J2a1RUVWZIVFg2MDNkaHREbEplUXZCeVhGK3lHc09sRFptT2kxT3pQZCs1OAptMU1neUlFTk16bVZQeGlTTDB1akh5UU51MDU1UGloaFNmWkVWTS90TlcxMmU1Njl6cGpDeTVXL2EvbVhYRytjCjcvUzFkViszQWdNQkFBRUNnZ0VBRTg3alR2N3JaTm14eWJRbVlqWUNPcTlvdFU2OUdQWEEra1ZCcUt0UTcwc0EKdGFGbUNyNXZOMTRPUFR3R1RFYTVveGRWS1NNeDM3MVBhci83QVQrR1JCeXNTRXNURlFuckU1NDFlQ1JlamthVwpPNkRUOU9kYkErUlFGeVVKaDJiaktLSU1POW54NlRuMHFoV1ppS0VXVnJtOFhweTVXdEptK2tQYjdYTktSSnN2Ci93c2FGTXYxZ2sxQnUzNno2WlBoMFl2c0g5OTBWVUtNKzhJdUFsWFlLb2w0Z1p0NFp1VGVXMlptaGo3Rmhaencvb0FMQHN5YU9wSUVYcEE0TTZnWkhRVVI1UG9qbURaaTJFK0c5ZFF0dWJSU0hDU2NldXBSYVprUldRYzN5aULibUQKcVMzZGpHUG5YZmpldGxXc3Bmb2ROeWpmZ1lRV1FRczhOZmdLYjJadXFRS0JnUURIQjNqYmYrblhsNkpNRmt2YgpaZGI0Mk1qOFhuVE1vdFhTS2VmdVVqM01PbVoybS92THBoenpwa3JSSktpSmU2YUdjakFuMTZRMmpiQzVaajFVCm1qaE11dE1mZ21jSzlOSmRyQTkvcGZkU2hPV2hqUUdVVDJXS05RNFFVemhVWkNxMEhuVXdUcXczTDdkT1lVdlYKSTV3T0xWcDA0NzQzNHdhblQ0L2NTR0xFRFFLQmdRREJvK0R0TFBqTGt1UE1RcDJIMy9ENlBXVE9hUFpRaTJTOApjNW9vVUZZb2hwTlBpOUoxUW1uRENvYlhKY0lkNTBCVkgrMkdsVmNxZWhlcmQvcXZpQjIxeFRXVCtMdGhFNWRBCmE3YzFsNWE0NHZDWk5DWlk3RlJLVFJ2dFQ0c0lubXhqV1JUZ3V3cDhQazFTMmtZc1BJUU9zZUZqaHFKenpKTmQKa1UvUWVwV3Qwd0tCZ1FDM0Q2bGJBeGtiZ2szMSsrQUR5WFRqNThsZFRxZlJmTWg4aUt6WjZHME14bjV1QStTaQpHSVNxVXcrbnRFWER0cWFoTExBY1JWeTJETGNLbi80ekxiSXc2UG05RnAwZVY3YVNEK3NsZG9xNExLSmxhQ09XCnZUeGcxWkc4OUQ1d2FMMWFkRlZIZkdVc1VVZ2g0SjMyU2N2b3NoQnNTUGt4d0MvamZldU5La3NsbFFLQmdRQ2UKeE9hOHNQNEJ0SnZRcytJRUt0dHI0b0RQK1NIVTRxWWpHa29RdWVZYTdsVEVpU2x6ZVpQTUZzcCtoM2dGR3NJVgp5Y3J3YVd5QjZIK1YyUmNUYTNDb3hGenN5YW1ocS9WOUhaU25mWFpZZThLNGF4anlHanYyZkFqazZDNWdUNzBoCkxENUJFVHRFcWJTdXRVZUtKOGhEWURna2FaU3ppODVjanJPNWhYbEtmd0tCZ0ZzVlZ3SUZpSzZVeDBEcVFvQXAKbEtjdGhmc3dEUytyaFplb1ZsNW5KLytYZFBscnZuR2ZTQTYnV2xjL0ZDemZaaXVaWkdidkZGSHZrLyt0RVVvQwpvMXBrM2xYMHVTTW1oM0taaDc2TDE1RkZrU1NDemw1M0hVQkwxT2RTSDBFL1ppdC8raFdiUWc5bnZ2b01xL3VjCnQ0djRjZUlEYlN5a0ZYL0NVVkRuRGdRQwotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tCg=="
 # -----------------------------------------------------------------------------
+
 # Backend Configuration
+
 # -----------------------------------------------------------------------------
 backend:
   replicaCount: 1
   image:
     repository: salem7ouda/backend
-    tag: v1.0.11
+    tag: v1.0.12
     pullPolicy: Always
   service:
     port: 5000
@@ -74,13 +79,15 @@ backend:
       cpu: 200m
       memory: 256Mi
   # ConfigMap values
+
   config:
     redisPort: "6379"
     postgresPort: "5432"
     postgresDb: appdb
-
 # -----------------------------------------------------------------------------
+
 # Database Configuration
+
 # -----------------------------------------------------------------------------
 database:
   postgres:
@@ -99,7 +106,6 @@ database:
       limits:
         cpu: 200m
         memory: 256Mi
-
   redis:
     replicaCount: 1
     image:
@@ -114,30 +120,36 @@ database:
       limits:
         cpu: 200m
         memory: 256Mi
-
 # -----------------------------------------------------------------------------
+
 # Network Policies
+
 # -----------------------------------------------------------------------------
 networkPolicies:
   enabled: true
   ingressNamespace: ingress-nginx
+# -----------------------------------------------------------------------------
+
+# Image Pull Secrets Configuration
 
 # -----------------------------------------------------------------------------
-# Image Pull Secrets Configuration
-# -----------------------------------------------------------------------------
+
 # IMPORTANT: Replace the password before deploying!
+
 # Password can be passed via CLI: --set imageCredentials.password=YOUR_PASSWORD
+
 # Or via ArgoCD/CI pipeline secrets
 imageCredentials:
   enabled: false
   name: regcred
   registry: "https://index.docker.io/v1/"
   username: "salem7ouda"
-  password: ""  # Passed via CLI or ArgoCD - DO NOT commit real password!
+  password: "" # Passed via CLI or ArgoCD - DO NOT commit real password!
   email: "elkassasmostafa29@gmail.com"
-
 # -----------------------------------------------------------------------------
+
 # Resource Quota Configuration
+
 # -----------------------------------------------------------------------------
 resourceQuota:
   enabled: true
@@ -149,4 +161,3 @@ resourceQuota:
     limits:
       cpu: "2"
       memory: 2Gi
-
