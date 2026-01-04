@@ -213,7 +213,7 @@ helm rollback DevOps 1 -n devops
 ### 🖼️ Visual Overview
 
 #### System Architecture
-![alt text](image.jpeg)
+![alt text](image1.jpeg)
 
 #### Deployment Diagram
 ![alt text](<WhatsApp Image 2026-01-04 at 10.46.04 AM.jpeg>)
