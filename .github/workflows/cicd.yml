@@ -154,6 +154,7 @@ jobs:
           # Only commit and push if there are changes
           if ! git diff --staged --quiet; then
             git commit -m "chore: update frontend scan reports"
+            git pull --rebase origin dev
             git push
           else
             echo "No changes to scan reports, skipping commit"
@@ -313,6 +314,7 @@ jobs:
           # Only commit and push if there are changes
           if ! git diff --staged --quiet; then
             git commit -m "chore: update backend scan reports"
+            git pull --rebase origin dev
             git push
           else
             echo "No changes to scan reports, skipping commit"
