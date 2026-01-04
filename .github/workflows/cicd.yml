@@ -186,6 +186,52 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
           echo "✅ Images signed successfully"
 
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Generate SBOM
+        run: |
+          echo "📦 Generating SBOM for frontend images..."
+          syft ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }} \
+            -o spdx-json=frontend-sbom.spdx.json
+          syft ${{ env.DOCKERHUB_USERNAME }}/frontend:latest \
+            -o spdx-json=frontend-sbom-latest.spdx.json
+          echo "✅ SBOM generated"
+
+      - name: Attach SBOM to Image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          echo "📎 Attaching SBOM attestations..."
+          cosign attest --yes --type spdx \
+            --predicate frontend-sbom.spdx.json \
+            ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }}
+          cosign attest --yes --type spdx \
+            --predicate frontend-sbom-latest.spdx.json \
+            ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
+          echo "✅ SBOM attestations attached"
+
+      - name: Generate and Attach Provenance
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          echo "🔗 Generating provenance attestation..."
+          echo '{
+            "buildType": "https://github.com/mahmoudsallem/med-project",
+            "builder": {"id": "https://github.com/actions/runner"},
+            "invocation": {
+              "configSource": {
+                "uri": "git+https://github.com/mahmoudsallem/med-project",
+                "digest": {"sha1": "${{ github.sha }}"},
+                "entryPoint": ".github/workflows/cicd.yml"
+              }
+            }
+          }' > provenance.json
+          cosign attest --yes --type slsaprovenance \
+            --predicate provenance.json \
+            ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }}
+          echo "✅ Provenance attestation attached"
+
       - name: Create Git Tag
         run: |
           git config user.name "github-actions[bot]"
@@ -360,6 +406,52 @@ jobs:
           cosign sign --yes \
             ${{ env.DOCKERHUB_USERNAME }}/backend:latest
           echo "✅ Images signed successfully"
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Generate SBOM
+        run: |
+          echo "📦 Generating SBOM for backend images..."
+          syft ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }} \
+            -o spdx-json=backend-sbom.spdx.json
+          syft ${{ env.DOCKERHUB_USERNAME }}/backend:latest \
+            -o spdx-json=backend-sbom-latest.spdx.json
+          echo "✅ SBOM generated"
+
+      - name: Attach SBOM to Image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          echo "📎 Attaching SBOM attestations..."
+          cosign attest --yes --type spdx \
+            --predicate backend-sbom.spdx.json \
+            ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }}
+          cosign attest --yes --type spdx \
+            --predicate backend-sbom-latest.spdx.json \
+            ${{ env.DOCKERHUB_USERNAME }}/backend:latest
+          echo "✅ SBOM attestations attached"
+
+      - name: Generate and Attach Provenance
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          echo "🔗 Generating provenance attestation..."
+          echo '{
+            "buildType": "https://github.com/mahmoudsallem/med-project",
+            "builder": {"id": "https://github.com/actions/runner"},
+            "invocation": {
+              "configSource": {
+                "uri": "git+https://github.com/mahmoudsallem/med-project",
+                "digest": {"sha1": "${{ github.sha }}"},
+                "entryPoint": ".github/workflows/cicd.yml"
+              }
+            }
+          }' > provenance.json
+          cosign attest --yes --type slsaprovenance \
+            --predicate provenance.json \
+            ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }}
+          echo "✅ Provenance attestation attached"
 
       - name: Create Git Tag
         run: |
