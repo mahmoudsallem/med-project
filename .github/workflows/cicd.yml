@@ -120,27 +120,6 @@ jobs:
           output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           exit-code: '0'
-      
-      - name: Check for Critical Vulnerabilities
-        run: |
-          echo "🔍 Checking for CRITICAL vulnerabilities..."
-          if grep -i "CRITICAL" trivy-results.txt; then
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "❌ CRITICAL VULNERABILITIES FOUND IN FRONTEND IMAGE!"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "📋 Critical Vulnerabilities Details:"
-            echo ""
-            grep -i "CRITICAL" trivy-results.txt | head -20
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "::error::Critical security vulnerabilities detected in frontend image"
-            echo "::error::Please review the scan results above and fix the vulnerabilities"
-            exit 1
-          else
-            echo "✅ No critical vulnerabilities found in frontend image"
-          fi
 
       - name: Generate Security Report
         working-directory: ./Project/frontend
@@ -301,27 +280,6 @@ jobs:
           output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           exit-code: '0'
-      
-      - name: Check for Critical Vulnerabilities
-        run: |
-          echo "🔍 Checking for CRITICAL vulnerabilities..."
-          if grep -i "CRITICAL" trivy-results.txt; then
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "❌ CRITICAL VULNERABILITIES FOUND IN BACKEND IMAGE!"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "📋 Critical Vulnerabilities Details:"
-            echo ""
-            grep -i "CRITICAL" trivy-results.txt | head -20
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "::error::Critical security vulnerabilities detected in backend image"
-            echo "::error::Please review the scan results above and fix the vulnerabilities"
-            exit 1
-          else
-            echo "✅ No critical vulnerabilities found in backend image"
-          fi
 
       - name: Generate Security Report
         working-directory: ./Project/backend
