@@ -6,6 +6,12 @@ metadata:
   namespace: {{ .Values.namespaces.frontend }}
 spec:
   ingressClassName: {{ .Values.frontend.ingress.ingressClassName }}
+  {{- if .Values.frontend.tls.enabled }}
+  tls:
+  - hosts:
+    - {{ .Values.frontend.ingress.host }}
+    secretName: {{ .Values.frontend.tls.secretName }}
+  {{- end }}
   rules:
   - host: {{ .Values.frontend.ingress.host }}
     http:

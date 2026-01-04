@@ -26,3 +26,5 @@ spec:
             secretKeyRef:
               name: db-secret
               key: REDIS_PASSWORD
+        resources:
+          {{- toYaml .Values.database.redis.resources | nindent 10 }}

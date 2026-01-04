@@ -1,0 +1,207 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+
+# 1. Workflow-level env (available to all jobs)
+env:
+  REGISTRY: ghcr.io
+  NODE_VERSION: '20'
+  JAVA_VERSION: '17'
+  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'Project/frontend/**'
+            backend:
+              - 'Project/backend/**'
+
+  frontend-ci:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    # 2. Job-level env (available to all steps in this job)
+    env:
+      APP_NAME: frontend
+      ENVIRONMENT: development
+      API_URL: ${{ secrets.FRONTEND_API_URL }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: Project/frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./Project/frontend
+        run: npm ci
+
+      - name: Build Application
+        working-directory: ./Project/frontend
+        # 3. Step-level env (only available in this step)
+        env:
+          REACT_APP_API_URL: ${{ secrets.FRONTEND_API_URL }}
+          REACT_APP_ENV: production
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: npm run build
+
+      - name: Lint
+        working-directory: ./Project/frontend
+        run: npm run lint
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: Project/frontend
+          args: >
+            -Dsonar.projectKey=frontend
+            -Dsonar.sources=src
+
+      - name: Docker Build
+        working-directory: ./Project/frontend
+        run: |
+          docker build \
+            --build-arg NODE_ENV=production \
+            --build-arg API_URL=${{ secrets.FRONTEND_API_URL }} \
+            --build-arg BUILD_VERSION=${{ github.sha }} \
+            -t ${{ env.REGISTRY }}/${{ github.repository }}/frontend:${{ github.sha }} .
+
+      - name: Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}/frontend:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/frontend:${{ github.sha }}
+          docker tag ${{ env.REGISTRY }}/${{ github.repository }}/frontend:${{ github.sha }} ${{ env.REGISTRY }}/${{ github.repository }}/frontend:latest
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/frontend:latest
+
+      - name: Update Helm Values
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          sed -i "s|tag:.*|tag: ${{ github.sha }}|g" helm/values.yaml
+          git add helm/values.yaml
+          git commit -m "Update frontend image tag to ${{ github.sha }}"
+          git push
+
+  backend-ci:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    # Job-level env for backend
+    env:
+      APP_NAME: backend
+      SPRING_PROFILES_ACTIVE: prod
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'maven'
+
+      - name: Build with Maven
+        working-directory: ./Project/backend
+        run: mvn clean package -DskipTests
+
+      - name: Lint (Checkstyle)
+        working-directory: ./Project/backend
+        run: mvn checkstyle:check
+
+      - name: SonarQube Scan
+        working-directory: ./Project/backend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=backend \
+            -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      - name: Docker Build
+        working-directory: ./Project/backend
+        run: |
+          docker build \
+            --build-arg SPRING_PROFILES_ACTIVE=prod \
+            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
+            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -t ${{ env.REGISTRY }}/${{ github.repository }}/backend:${{ github.sha }} .
+
+      - name: Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}/backend:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/backend:${{ github.sha }}
+          docker tag ${{ env.REGISTRY }}/${{ github.repository }}/backend:${{ github.sha }} ${{ env.REGISTRY }}/${{ github.repository }}/backend:latest
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/backend:latest
+
+      - name: Update Helm Values
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          sed -i "s|tag:.*|tag: ${{ github.sha }}|g" helm/values.yaml
+          git add helm/values.yaml
+          git commit -m "Update backend image tag to ${{ github.sha }}"
+          git push
+
+  argocd-sync:
+    needs: [frontend-ci, backend-ci]
+    if: |
+      always() && 
+      (needs.frontend-ci.result == 'success' || needs.frontend-ci.result == 'skipped') &&
+      (needs.backend-ci.result == 'success' || needs.backend-ci.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger ArgoCD Sync
+        run: |
+          echo "🚀 ArgoCD will automatically detect changes in Helm values"
+          echo "Or manually sync with ArgoCD CLI:"
+          echo "argocd app sync <app-name>"

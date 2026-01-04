@@ -1,10 +1,31 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import psycopg2
 import redis
 import os
 import json
 
+# Flask backend application
 app = Flask(__name__)
+
+# CORS Configuration - Only allow requests from your frontend
+# In production, replace '*' with your actual frontend domain
+CORS(app, resources={
+    r"/api/*": {
+        "origins": os.getenv("ALLOWED_ORIGINS", "*").split(","),
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "supports_credentials": False
+    }
+})
+
+# Security headers
+@app.after_request
+def add_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
 
 pg_conn = psycopg2.connect(
     host=os.getenv("POSTGRES_HOST"),
@@ -35,15 +56,28 @@ pg_conn.commit()
 @app.route("/api/users", methods=["POST"])
 def add_user():
     data = request.json
-    cur.execute(
-        "INSERT INTO users (name, job, email) VALUES (%s,%s,%s)",
-        (data["name"], data["job"], data["email"])
-    )
-    pg_conn.commit()
-    redis_client.delete("users")
-    return jsonify({"status": "ok"})
+    
+    # Input validation
+    if not data or not all(k in data for k in ["name", "job", "email"]):
+        return jsonify({"error": "Missing required fields"}), 400
+    
+    # Basic email validation
+    if "@" not in data["email"]:
+        return jsonify({"error": "Invalid email format"}), 400
+    
+    try:
+        cur.execute(
+            "INSERT INTO users (name, job, email) VALUES (%s,%s,%s)",
+            (data["name"], data["job"], data["email"])
+        )
+        pg_conn.commit()
+        redis_client.delete("users")
+        return jsonify({"status": "ok"})
+    except Exception as e:
+        pg_conn.rollback()
+        return jsonify({"error": "Database error"}), 500
 
-import json
+
 
 @app.route("/api/users", methods=["GET"])
 def get_users():
