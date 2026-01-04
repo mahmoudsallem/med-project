@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - dev
+      - "*"
 
 # 1. Workflow-level env (available to all jobs)
 env:
