@@ -120,6 +120,16 @@ jobs:
           output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           exit-code: '0'
+      
+      - name: Check for Critical Vulnerabilities
+        run: |
+          if grep -i "CRITICAL" trivy-results.txt; then
+            echo "❌ CRITICAL VULNERABILITY FOUND!"
+            echo "::error::Critical security vulnerabilities detected in frontend image"
+            exit 1
+          else
+            echo "✅ No critical vulnerabilities found"
+          fi
 
       - name: Generate Security Report
         working-directory: ./Project/frontend
@@ -280,6 +290,16 @@ jobs:
           output: 'trivy-results.txt'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           exit-code: '0'
+      
+      - name: Check for Critical Vulnerabilities
+        run: |
+          if grep -i "CRITICAL" trivy-results.txt; then
+            echo "❌ CRITICAL VULNERABILITY FOUND!"
+            echo "::error::Critical security vulnerabilities detected in backend image"
+            exit 1
+          else
+            echo "✅ No critical vulnerabilities found"
+          fi
 
       - name: Generate Security Report
         working-directory: ./Project/backend
