@@ -44,6 +44,7 @@ jobs:
     permissions:
       contents: write
       packages: write
+      id-token: write  # Required for Cosign keyless signing
     env:
       APP_NAME: frontend
     outputs:
@@ -171,6 +172,20 @@ jobs:
           docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }}
           docker push ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
 
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign Frontend Image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          echo "🔐 Signing frontend images with Cosign..."
+          cosign sign --yes \
+            ${{ env.DOCKERHUB_USERNAME }}/frontend:${{ steps.version.outputs.version }}
+          cosign sign --yes \
+            ${{ env.DOCKERHUB_USERNAME }}/frontend:latest
+          echo "✅ Images signed successfully"
+
       - name: Create Git Tag
         run: |
           git config user.name "github-actions[bot]"
@@ -187,6 +202,7 @@ jobs:
     permissions:
       contents: write
       packages: write
+      id-token: write  # Required for Cosign keyless signing
     env:
       APP_NAME: backend
     outputs:
@@ -330,6 +346,20 @@ jobs:
         run: |
           docker push ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }}
           docker push ${{ env.DOCKERHUB_USERNAME }}/backend:latest
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign Backend Image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          echo "🔐 Signing backend images with Cosign..."
+          cosign sign --yes \
+            ${{ env.DOCKERHUB_USERNAME }}/backend:${{ steps.version.outputs.version }}
+          cosign sign --yes \
+            ${{ env.DOCKERHUB_USERNAME }}/backend:latest
+          echo "✅ Images signed successfully"
 
       - name: Create Git Tag
         run: |
