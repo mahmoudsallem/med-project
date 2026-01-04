@@ -16,7 +16,7 @@ frontend:
   replicaCount: 2
   image:
     repository: salem7ouda/frontend
-    tag: v1.0.9
+    tag: v1.0.10
     pullPolicy: Always
   service:
     port: 80
@@ -32,7 +32,7 @@ backend:
   replicaCount: 2
   image:
     repository: salem7ouda/backend
-    tag: v1.0.9
+    tag: v1.0.10
     pullPolicy: Always
   service:
     port: 5000
