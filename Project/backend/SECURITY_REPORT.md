@@ -1,7 +1,7 @@
 # Security Scan Report (Trivy)
 
-**Image:** mahmoudsallem/backend:v1.0.4
-**Scan Date:** 2026-01-03 21:37:25
+**Image:** mahmoudsallem/backend:v1.0.11
+**Scan Date:** 2026-01-04 04:35:56
 **Severity Levels:** CRITICAL, HIGH, MEDIUM, LOW
 
 ```
@@ -11,13 +11,15 @@ Report Summary
 ┌──────────────────────────────────────────────────────────────────────────────────┬────────────┬─────────────────┬─────────┐
 │                                      Target                                      │    Type    │ Vulnerabilities │ Secrets │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
-│ salem7ouda/backend:v1.0.4 (debian 13.2)                                          │   debian   │       61        │    -    │
+│ salem7ouda/backend:v1.0.11 (debian 13.2)                                         │   debian   │       61        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
 │ usr/local/lib/python3.11/site-packages/blinker-1.9.0.dist-info/METADATA          │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
 │ usr/local/lib/python3.11/site-packages/click-8.3.1.dist-info/METADATA            │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
 │ usr/local/lib/python3.11/site-packages/flask-3.1.2.dist-info/METADATA            │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.11/site-packages/flask_cors-6.0.2.dist-info/METADATA       │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
 │ usr/local/lib/python3.11/site-packages/itsdangerous-2.2.0.dist-info/METADATA     │ python-pkg │        0        │    -    │
 ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
@@ -99,8 +101,8 @@ Learn more and start using VEX: https://trivy.dev/docs/v0.68/guide/supply-chain/
 To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
 
 
-salem7ouda/backend:v1.0.4 (debian 13.2)
-=======================================
+salem7ouda/backend:v1.0.11 (debian 13.2)
+========================================
 Total: 61 (LOW: 51, MEDIUM: 10, HIGH: 0, CRITICAL: 0)
 
 ┌────────────────┬─────────────────────┬──────────┬──────────┬─────────────────────────┬───────────────┬──────────────────────────────────────────────────────────────┐
