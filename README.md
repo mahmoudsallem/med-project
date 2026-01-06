@@ -30,21 +30,70 @@ The project demonstrates microservices architecture, secure networking, Helm-bas
 ## 📁 Project Structure
 
 ```
-.
-├── frontend/
-├── backend/
-├── db/
-├── k8s/
-│   ├── frontend/
-│   ├── backend/
-│   ├── db/
-│   └── network-policies/
-├── helm/
-│   └── devops-app/
-└── README.md
+med-project/
+├── Project/                          # Application source code and configurations
+│   ├── backend/                      # Python Flask REST API service
+│   │   ├── app.py                    # Main Flask application
+│   │   ├── Dockerfile                # Container image for backend service
+│   │   ├── requirements.txt           # Python dependencies
+│   │   ├── test_app.py                # Unit tests
+│   │   ├── QUALITY_REPORT.md          # Code quality metrics
+│   │   └── SECURITY_REPORT.md         # Security assessment report
+│   ├── frontend/                     # Python web frontend application
+│   │   ├── index.html                # Web interface
+│   │   ├── default.conf               # Nginx configuration
+│   │   ├── Dockerfile                # Container image for frontend service
+│   │   ├── QUALITY_REPORT.md          # Code quality metrics
+│   │   └── SECURITY_REPORT.md         # Security assessment report
+│   ├── k8s/                          # Native Kubernetes manifests
+│   │   ├── backend/                  # Backend service and configs
+│   │   ├── frontend/                 # Frontend service and ingress
+│   │   ├── db/                       # Database (PostgreSQL & Redis)
+│   │   └── network-policies/         # Network security policies
+│   ├── helm/                         # Helm umbrella chart for single release
+│   │   └── devops-app/               # DevOps application chart
+│   │       ├── Chart.yaml            # Chart metadata
+│   │       ├── values.yaml           # Default configuration values
+│   │       └── templates/            # Kubernetes resource templates
+│   └── Deployment_Instructions.md    # Detailed deployment guide
+├── eks-terraform/                    # AWS EKS infrastructure-as-code
+│   ├── main.tf                       # Root Terraform configuration
+│   ├── variables.tf                  # Input variable definitions
+│   ├── outputs.tf                    # Output value definitions
+│   ├── provider.tf                   # AWS provider configuration
+│   ├── data.tf                       # Data source definitions
+│   ├── terraform.tfvars              # Terraform variable values
+│   ├── eks/                          # EKS cluster configuration
+│   ├── vpc/                          # VPC and networking resources
+│   ├── ingress/                      # Ingress controller setup
+│   └── README.md                     # EKS deployment documentation
+├── ARGOCD_SETUP.md                   # ArgoCD continuous deployment guide
+└── README.md                         # This file
 ```
 
+### 🖼️ System Architecture
+![Architecture Diagram](image.png)
+
 ---
+## ☁️ Deployment Guide (AWS EKS)
+
+For production deployment on AWS EKS, refer to the comprehensive infrastructure-as-code setup in the [eks-terraform/](eks-terraform/) directory. The Terraform configuration automates the provisioning of:
+
+- **EKS Cluster:** Managed Kubernetes cluster with configurable node groups
+- **VPC & Networking:** Custom VPC with public/private subnets, NAT gateways, and routing tables
+- **Security Groups:** Fine-grained access control for cluster and node communication
+- **IAM Roles:** Proper identity and access management for Kubernetes nodes and services
+- **Ingress Controller:** Nginx ingress controller for external traffic routing
+
+### Quick Start with Terraform
+```bash
+cd eks-terraform
+terraform init
+terraform plan
+terraform apply
+```
+
+For detailed EKS deployment instructions, see [eks-terraform/README.md](eks-terraform/README.md)
 
 ## 🚀 Deployment Guide (Minikube)
 
@@ -76,7 +125,6 @@ Example:
 ### Update Hosts File
 ```
 192.168.49.2 frontend.nti.com
-192.168.49.2 backend.nti.com
 ```
 
 ---
@@ -101,8 +149,38 @@ kubectl get ingress -n devops
 ---
 
 ### 🌐 Access the Application
-- **Frontend:** http://frontend.nti.com  
-- **Backend:** http://backend.nti.com
+
+#### Minikube (Local Development)
+```bash
+# Get Minikube IP
+minikube ip
+
+# Access frontend via hostname
+# http://frontend.nti.com  (after updating hosts file)
+```
+
+#### AWS EKS (Production)
+```bash
+# Get ALB/Ingress Controller Service URL
+kubectl get svc -n ingress-nginx
+```
+**Example:** If your ingress controller service returns `a1234567890.us-east-1.elb.amazonaws.com`, update your frontend ingress host:
+```yaml
+spec:
+  rules:
+  - host: a1234567890.us-east-1.elb.amazonaws.com  # ALB URL from ingress controller
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+```
+
+Then access in browser: `http://a1234567890.us-east-1.elb.amazonaws.com`
 
 ---
 
@@ -160,6 +238,8 @@ Open: http://localhost:9090
 
 ---
 
+---
+
 ### 🛠 Monitoring & Troubleshooting Commands
 
 #### Cluster Status
@@ -193,11 +273,12 @@ helm rollback DevOps 1 -n devops
 ---
 
 ### ✅ Key DevOps Practices Demonstrated
-- Kubernetes multi-tier architecture  
+- Kubernetes multi-tier microservices architecture  
 - Secure networking with Network Policies  
 - Helm umbrella chart deployment  
 - Observability with Prometheus & Grafana  
 - Production-style monitoring & troubleshooting  
+- Infrastructure-as-code (Terraform) for cloud deployment  
 - Clean upgrade and rollback strategy
 
 ---
@@ -206,14 +287,4 @@ helm rollback DevOps 1 -n devops
 - Expose `/metrics` endpoint for Python services  
 - Custom Grafana dashboards  
 - Alerting rules (CPU, memory, pod restarts)  
-- CI/CD pipeline integration
-
----
-
-### 🖼️ Visual Overview
-
-#### System Architecture
-![alt text](image.jpeg)
-
-#### Deployment Diagram
-![alt text](<WhatsApp Image 2026-01-04 at 10.46.04 AM.jpeg>)
+- CI/CD pipeline integration with ArgoCD
